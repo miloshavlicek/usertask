@@ -7,5 +7,8 @@
             "email": "miloshavlicek@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": ">= 5.5",
+        "nette/nette": "~2.3.0"
+    }
 }
