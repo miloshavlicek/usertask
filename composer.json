@@ -8,9 +8,7 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "src": ""
-        }
+        "classmap": ["src/"]
     },
     "require": {
         "php": ">= 5.5",
