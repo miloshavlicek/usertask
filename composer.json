@@ -1,0 +1,11 @@
+{
+    "name": "miloshavlicek/usertask",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Milos Havlicek",
+            "email": "miloshavlicek@gmail.com"
+        }
+    ],
+    "require": {}
+}
