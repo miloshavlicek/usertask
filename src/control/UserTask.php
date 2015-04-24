@@ -32,19 +32,7 @@ class UserTask extends \Nette\Object {
 		$this->tasks[] = $task;
 	}
 
-	public function setBreakOnFirstFail($in) {
-		$this->breakOnFirstFail = (bool) $in;
-	}
-
-	public function setForwardExceptions($in) {
-		$this->forwardExceptions = (bool) $in;
-	}
-
-	public function setRedirect() {
-		$this->redirectArgs = func_get_args();
-	}
-
-	public function run() {
+	public function executeOnly() {
 		foreach ($this->tasks as $tasksOne) {
 			try {
 				$this->runTask($tasksOne);
@@ -55,12 +43,32 @@ class UserTask extends \Nette\Object {
 				$this->catchException($e);
 			}
 		}
+	}
+
+	public function getData() {
+		return (object) $this->data;
+	}
+
+	public function run() {
+		$this->executeOnly();
 
 		$this->terminate();
 	}
 
+	public function setBreakOnFirstFail($in) {
+		$this->breakOnFirstFail = (bool) $in;
+	}
+
+	public function setForwardExceptions($in) {
+		$this->forwardExceptions = (bool) $in;
+	}
+
 	public function setName($name) {
 		$this->name = Strings::trim($name);
+	}
+
+	public function setRedirect() {
+		$this->redirectArgs = func_get_args();
 	}
 
 	public function setShowDetails($value) {
@@ -69,6 +77,11 @@ class UserTask extends \Nette\Object {
 
 	public function setShowFlash($value) {
 		$this->showFlash = (bool) $value;
+	}
+
+	public function terminate() {
+		$this->showFlash && $this->flash();
+		!empty($this->redirectArgs) && call_user_func_array([$this->presenter, 'redirect'], $this->redirectArgs);
 	}
 
 	private function catchException($e) {
@@ -85,18 +98,9 @@ class UserTask extends \Nette\Object {
 		$this->breakOnFirstFail && $this->terminate();
 	}
 
-	private function getData() {
-		return (object) $this->data;
-	}
-
 	private function runTask($task) {
 		$data = $task($this->getData());
 		is_array($data) && $this->data = array_merge($this->data, $data);
-	}
-
-	private function terminate() {
-		$this->showFlash && $this->flash();
-		!empty($this->redirectArgs) && call_user_func_array([$this->presenter, 'redirect'], $this->redirectArgs);
 	}
 
 	private function flash() {
