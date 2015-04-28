@@ -134,7 +134,7 @@ class UserTask extends \Nette\Object {
 
 		if ($this->getShowDetails) {
 			$errors = $this->getErrorMessages();
-			$message .= (empty($errors) ? '' : ' (' . implode(', ', $errors) . ')');
+			$message .= Strings::fixEncoding(empty($errors) ? '' : ' (' . implode(', ', $errors) . ')');
 		}
 
 		$this->presenter->flashMessage($message, 'danger');
