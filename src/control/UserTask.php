@@ -132,7 +132,7 @@ class UserTask extends \Nette\Object {
 	private function flashError() {
 		$message = $this->getMessageFail();
 
-		if ($this->getShowDetails) {
+		if ($this->getShowDetails()) {
 			$errors = $this->getErrorMessages();
 			$message .= Strings::fixEncoding(empty($errors) ? '' : ' (' . implode(', ', $errors) . ')');
 		}
