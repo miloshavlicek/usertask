@@ -21,7 +21,7 @@ class UserTask extends \Nette\Object {
 	private $name;
 	private $presenter;
 	private $redirectArgs;
-	private $showDetails = TRUE;
+	private $showDetails;
 	private $showFlash = TRUE;
 	private $tasks = [];
 
@@ -57,6 +57,10 @@ class UserTask extends \Nette\Object {
 
 	private function getMessageSuccess() {
 		return $this->messageSuccess ? : ($this->name === NULL ? 'Akce byla úspěšně provedena.' : Strings::firstUpper($this->name) . ' proběhlo úspěšně.');
+	}
+
+	public function getShowDetails() {
+		return $this->showDetails !== NULL ? $this->showDetails : $_SERVER['REMOTE_ADDR'] === '127.0.0.1' ? TRUE : FALSE;
 	}
 
 	public function run() {
@@ -128,7 +132,7 @@ class UserTask extends \Nette\Object {
 	private function flashError() {
 		$message = $this->getMessageFail();
 
-		if ($this->showDetails) {
+		if ($this->getShowDetails) {
 			$errors = $this->getErrorMessages();
 			$message .= (empty($errors) ? '' : ' (' . implode(', ', $errors) . ')');
 		}
