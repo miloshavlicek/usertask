@@ -16,6 +16,8 @@ class UserTask extends \Nette\Object {
 	private $data = [];
 	private $forwardExceptions = FALSE;
 	private $exceptions = [];
+	private $messageFail;
+	private $messageSuccess;
 	private $name;
 	private $presenter;
 	private $redirectArgs;
@@ -49,6 +51,14 @@ class UserTask extends \Nette\Object {
 		return (object) $this->data;
 	}
 
+	private function getMessageFail() {
+		return $this->messageFail ? : ($this->name === NULL ? 'Bohužel došlo k chybě!' : 'Bohužel, při ' . $this->name . ' došlo k chybě.');
+	}
+
+	private function getMessageSuccess() {
+		return $this->messageSuccess ? : ($this->name === NULL ? 'Akce byla úspěšně provedena.' : Strings::firstUpper($this->name) . ' proběhlo úspěšně.');
+	}
+
 	public function run() {
 		$this->executeOnly();
 
@@ -61,6 +71,14 @@ class UserTask extends \Nette\Object {
 
 	public function setForwardExceptions($in) {
 		$this->forwardExceptions = (bool) $in;
+	}
+
+	public function setMessageFail($in) {
+		$this->messageFail = (string) $in;
+	}
+
+	public function setMessageSuccess($in) {
+		$this->messageSuccess = (string) $in;
 	}
 
 	public function setName($name) {
@@ -108,7 +126,7 @@ class UserTask extends \Nette\Object {
 	}
 
 	private function flashError() {
-		$message = ($this->name === NULL ? 'Bohužel došlo k chybě!' : 'Bohužel, při ' . $this->name . ' došlo k chybě.');
+		$message = $this->getMessageFail();
 
 		if ($this->showDetails) {
 			$errors = $this->getErrorMessages();
@@ -119,9 +137,7 @@ class UserTask extends \Nette\Object {
 	}
 
 	private function flashSuccess() {
-		$message = ($this->name === NULL ? 'Akce byla úspěšně provedena.' : Strings::firstUpper($this->name) . ' proběhlo úspěšně.');
-
-		$this->presenter->flashMessage($message, 'success');
+		$this->presenter->flashMessage($this->getMessageSuccess(), 'success');
 	}
 
 	private function getErrorMessages() {
