@@ -11,7 +11,7 @@
         "classmap": ["src/"]
     },
     "require": {
-        "php": ">= 5.5",
-        "nette/nette": "~2.3.0"
+        "php": ">=5.5",
+        "nette/nette": ">=2.3.0"
     }
 }
