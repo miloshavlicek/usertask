@@ -50,7 +50,7 @@ class UserTask
         }
     }
 
-    public function getData(): object
+    public function getData(): \stdClass
     {
         return (object) $this->data;
     }
